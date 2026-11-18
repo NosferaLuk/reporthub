@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="report-hub-project" content="dispohub">
+<title>DispoHub · ReportHub</title>
+<style>
+:root { --borda: #d0d7de; --texto: #1f2328; --suave: #656d76; --painel: #ffffff; --fundo: #f6f8fa; --destaque: #0969da; --ouro: #9a6700; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--fundo); color: var(--texto); line-height: 1.5; }
+.envolve { max-width: 1120px; margin: 0 auto; padding: 32px 20px 64px; }
+.cabeca { border-bottom: 1px solid var(--borda); padding-bottom: 18px; margin-bottom: 24px; }
+.rotulo { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--suave); margin: 0 0 4px; }
+h1 { margin: 0 0 6px; font-size: 26px; }
+h1 a { color: inherit; text-decoration: none; }
+.sub { margin: 0; color: var(--suave); font-size: 14px; }
+.meta { margin-top: 8px; color: var(--suave); font-size: 13px; }
+/* números grandes */
+.numeros { display: flex; flex-wrap: wrap; gap: 10px 22px; margin: 16px 0 0; }
+.num-bloco { min-width: 130px; }
+.num-bloco b { display: block; font-size: 26px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.num-bloco span { font-size: 12px; color: var(--suave); }
+.num-bloco.aviso b { color: #bc4c00; }
+.num-bloco.ok b { color: #1a7f37; }
+/* hub */
+.cartoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+.cartao { background: var(--painel); border: 1px solid var(--borda); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; }
+.cartao h2 { margin: 0 0 4px; font-size: 20px; }
+.cartao h2 a { color: inherit; text-decoration: none; }
+.cartao h2 a:hover { color: var(--destaque); }
+.cartao .desc { color: var(--suave); font-size: 13px; margin: 0 0 12px; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.pill { font-size: 12px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--borda); color: var(--suave); background: #fff; }
+.pill.hoje { color: #1a7f37; border-color: #1a7f37; background: #dafbe1; font-weight: 600; }
+.pill.aviso { color: #bc4c00; border-color: #bc4c00; background: #fff1e5; font-weight: 600; }
+.barra-total { display: flex; height: 10px; border-radius: 5px; overflow: hidden; margin: 4px 0 8px; }
+.barra-total i { display: block; height: 100%; }
+.barra-legenda { font-size: 11px; color: var(--suave); margin-bottom: 12px; }
+.ultimas { border-top: 1px solid var(--borda); margin-top: auto; padding-top: 10px; }
+.ultimas-titulo { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--suave); margin-bottom: 6px; }
+.ultimas ul { list-style: none; margin: 0; padding: 0; }
+.ultimas li { font-size: 12px; padding: 3px 0; display: flex; gap: 8px; align-items: baseline; }
+.ultimas .hora { color: var(--suave); font-variant-numeric: tabular-nums; white-space: nowrap; min-width: 38px; }
+.ultimas .estrela { color: var(--ouro); }
+.abrir { display: inline-block; margin-top: 10px; color: var(--destaque); font-size: 14px; font-weight: 600; text-decoration: none; }
+.abrir:hover { text-decoration: underline; }
+/* o que foi feito */
+.feito { background: var(--painel); border: 1px solid var(--borda); border-radius: 12px; padding: 18px 20px; margin-bottom: 20px; }
+.feito h2, .aguardando h2 { margin: 0 0 4px; font-size: 15px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--suave); }
+.dia { font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--destaque); margin: 12px 0 4px; }
+.dia .data-cheia { color: var(--suave); font-weight: 400; }
+.feito-lista { list-style: none; margin: 0; padding: 0; }
+.feito-lista li { display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--fundo); font-size: 14px; align-items: baseline; }
+.feito-lista li:last-child { border-bottom: 0; }
+.feito-lista .hora { color: var(--suave); font-variant-numeric: tabular-nums; min-width: 44px; white-space: nowrap; }
+.feito-lista .estrela { color: var(--ouro); }
+.feito-lista .ponto-lista { color: #c8ccd2; }
+.feito-lista .onde { color: var(--suave); font-size: 12px; white-space: nowrap; background: var(--fundo); border-radius: 6px; padding: 1px 7px; }
+/* aguardando o dono */
+.aguardando { background: #fff8e1; border: 1px solid #e7d8a8; border-radius: 12px; padding: 18px 20px; margin-bottom: 20px; }
+.aguardando h2 { color: #9a6700; }
+.aguardando ul { list-style: none; margin: 6px 0 0; padding: 0; }
+.aguardando li { padding: 8px 0; border-bottom: 1px solid #f0e5c0; font-size: 14px; }
+.aguardando li:last-child { border-bottom: 0; }
+.badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; margin-left: 6px; color: #fff; }
+.resp { color: var(--suave); font-size: 12px; }
+/* painel do projeto */
+.varetas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 20px; margin-top: 8px; }
+.vareta { background: var(--painel); border: 1px solid var(--borda); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.vareta h3 { margin: 0; font-size: 17px; }
+.vareta .desc { color: var(--suave); font-size: 13px; margin: 0; }
+.area { border-top: 1px solid var(--borda); padding-top: 10px; }
+.area-nome { font-weight: 600; font-size: 14px; }
+.area-desc { color: var(--suave); font-size: 12px; margin: 2px 0 6px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; }
+.area-nota { font-size: 13px; margin: 8px 0 0; }
+.area-numeros { font-size: 12px; color: var(--suave); margin: 6px 0 0; }
+.etapa-strip { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 6px; }
+.etapa-linha { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--suave); border: 1px solid var(--borda); border-radius: 8px; padding: 3px 10px; background: #fff; }
+.ponto { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+.secoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 20px; margin-top: 24px; }
+.secao { background: var(--painel); border: 1px solid var(--borda); border-radius: 12px; padding: 18px; }
+.secao h2 { margin: 0 0 12px; font-size: 15px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--suave); }
+.lista { list-style: none; margin: 0; padding: 0; }
+.lista li { padding: 8px 0; border-bottom: 1px solid var(--borda); font-size: 13px; }
+.lista li:last-child { border-bottom: 0; }
+.barra-linha { display: grid; grid-template-columns: 150px 1fr 40px; align-items: center; gap: 10px; font-size: 13px; padding: 4px 0; }
+.barra { height: 8px; border-radius: 4px; background: #eaeef2; overflow: hidden; }
+.barra i { display: block; height: 100%; background: var(--destaque); }
+.parte { border-top: 1px solid var(--borda); padding-top: 10px; margin-top: 10px; font-size: 13px; }
+.parte b { font-size: 14px; }
+.rodape { margin-top: 40px; color: var(--suave); font-size: 12px; text-align: center; }
+/* interação: tudo que parece botão leva a um lugar */
+html { scroll-behavior: smooth; }
+.num-bloco a { display: block; text-decoration: none; color: inherit; border-radius: 8px; padding: 2px 8px; margin: -2px -8px; }
+.num-bloco a:hover b { color: var(--destaque); }
+.num-bloco.aviso a:hover b { color: #cf222e; }
+a.pill { text-decoration: none; }
+a.pill:hover { border-color: var(--destaque); color: var(--destaque); }
+a.pill.aviso:hover { border-color: #cf222e; color: #cf222e; }
+a.barra-total { display: block; text-decoration: none; }
+a.barra-total:hover { opacity: 0.8; }
+.ultimas li a, .feito-lista li a { color: inherit; text-decoration: none; }
+.ultimas li a:hover span { text-decoration: underline; }
+a.onde { text-decoration: none; }
+a.onde:hover { background: #e4e9ef; }
+.etapa-linha a { color: inherit; text-decoration: none; }
+.etapa-linha a:hover { color: var(--destaque); }
+a.volta { font-size: 13px; color: var(--suave); text-decoration: none; }
+a.volta:hover { color: var(--destaque); }
+</style>
+</head>
+<body>
+<div class="envolve">
+  <header class="cabeca">
+    <p class="rotulo">Projeto · ReportHub</p>
+    <h1><a href="../hub/index.html">DispoHub</a></h1>
+    <p class="meta">Manhã de 18/11/2026 · gerado em 18/11/2026</p>
+    <div class="numeros">
+      <div class="num-bloco ok"><a href="#feito"><b>3</b><span>mudanças hoje</span></a></div>
+      <div class="num-bloco aviso"><a href="#pendencias"><b>3</b><span>aguardam o dono</span></a></div>
+      <div class="num-bloco "><a href="#areas"><b>19</b><span>áreas</span></a></div>
+      <div class="num-bloco "><a href="#pendencias"><b>3</b><span>pendências ao todo</span></a></div>
+    </div>
+  </header>
+  <section class="feito" id="feito"><h2>O que foi feito</h2><div class="dia">Hoje</div><ul class="feito-lista"><li><span class="hora">10:45</span><span class="estrela">★</span><span>A busca que falhava depois do CEP foi para o ambiente real</span><span class="onde">CL · Busca de endereço</span></li><li><span class="hora">10:45</span><span class="estrela">★</span><span>Processamento e gestão separados da consulta</span><span class="onde">PI · Subida em partes</span></li><li><span class="hora">10:45</span><span class="ponto-lista">•</span><span>A revisão avisa quantas quadras de rua faltam e não troca o mapa publicado</span><span class="onde">PI · Revisão da cobertura</span></li></ul></section>
+  <section class="secao" id="pendencias"><h2>Pendências por responsável</h2><div class="dia">Dono <span class="data-cheia">· 3</span></div><ul class="feito-lista"><li><span>Combinar o horário para enviar a revisão do processamento. A consulta para por alguns segundos</span> <span class="badge" style="background:#0969da">Subida</span></li><li><span>Decidir como completar as ruas de Goiânia, Salvador e Goianésia antes de aprovar a cobertura da cidade</span> <span class="badge" style="background:#cf222e">Decisão</span></li><li><span>Definir o horário e ligar a leitura das caixas da empresa de Goiânia</span> <span class="badge" style="background:#cf222e">Decisão</span></li></ul></section>
+  <div class="etapa-strip"><span class="etapa-linha"><a href="#areas">escrito: <span class="ponto" style="background:#1a7f37"></span>16 <span class="ponto" style="background:#9a6700"></span>0 <span class="ponto" style="background:#0969da"></span>0 <span class="ponto" style="background:#6e7781"></span>3</a></span><span class="etapa-linha"><a href="#areas">revisado: <span class="ponto" style="background:#1a7f37"></span>0 <span class="ponto" style="background:#9a6700"></span>0 <span class="ponto" style="background:#0969da"></span>0 <span class="ponto" style="background:#6e7781"></span>19</a></span><span class="etapa-linha"><a href="#areas">subido: <span class="ponto" style="background:#1a7f37"></span>15 <span class="ponto" style="background:#9a6700"></span>0 <span class="ponto" style="background:#0969da"></span>0 <span class="ponto" style="background:#6e7781"></span>4</a></span><span class="etapa-linha"><a href="#areas">testado: <span class="ponto" style="background:#1a7f37"></span>0 <span class="ponto" style="background:#9a6700"></span>0 <span class="ponto" style="background:#0969da"></span>0 <span class="ponto" style="background:#6e7781"></span>19</a></span></div>
+  <div class="varetas" id="areas"><section class="vareta"><h3>Servidor</h3><p class="desc">Calcula a consulta. A tela e as ligações mostram esse resultado, sem recalcular por conta própria.</p>
+      <div class="area">
+        <div class="area-nome">Cálculo da busca</div>
+        <div class="area-desc">Acha o lugar a partir do endereço escrito e do CEP.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície servidor, versão 1.0.0, desde 17/11).</p>
+        
+        
+      </div>
+      <div class="area">
+        <div class="area-nome">Cálculo da cobertura</div>
+        <div class="area-desc">Diz se o lugar tem cobertura a partir do mapa já publicado.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície servidor, versão 1.0.0, desde 17/11).</p>
+        
+        
+      </div></section><section class="vareta"><h3>Api</h3><p class="desc">As ligações que a tela e os outros serviços usam para consultar.</p>
+      <div class="area">
+        <div class="area-nome">Consulta de endereço</div>
+        <div class="area-desc">Devolve o lugar e a cobertura para quem consulta fora da tela.</div>
+        <div class="chips"><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        
+        
+        
+      </div>
+      <div class="area">
+        <div class="area-nome">Consulta de CEP</div>
+        <div class="area-desc">Completa a rua, o bairro e a cidade a partir do CEP.</div>
+        <div class="chips"><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        
+        
+        
+      </div></section><section class="vareta"><h3>CL</h3><p class="desc">A tela de quem consulta no dia a dia.</p>
+      <div class="area">
+        <div class="area-nome">Busca de endereço</div>
+        <div class="area-desc">Onde a pessoa escreve o endereço e o CEP e vê o lugar no mapa.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Quando o CEP já acha a rua, a consulta aponta o lugar. Foi a pedido do dono. Falta o uso do dia a dia confirmar.</p>
+        
+        
+      </div>
+      <div class="area">
+        <div class="area-nome">Resultado da consulta</div>
+        <div class="area-desc">O que a tela mostra sobre a cobertura daquele lugar.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície cl, versão 1.0.0, desde 17/11).</p>
+        
+        
+      </div>
+      <div class="area">
+        <div class="area-nome">Retorno de quem consultou</div>
+        <div class="area-desc">O registro de como foi a consulta, quando a pessoa quer contar.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície cl, versão 1.0.0, desde 17/11).</p>
+        
+        
+      </div></section><section class="vareta"><h3>ADM</h3><p class="desc">O governo do sistema: pessoas, horário e histórico. A consulta não passa por esta tela.</p>
+      <div class="area">
+        <div class="area-nome">Pessoas</div>
+        <div class="area-desc">Quem entra e o que cada pessoa pode fazer.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície adm, versão 1.0.0, desde 17/11).</p>
+        
+        
+      </div>
+      <div class="area">
+        <div class="area-nome">Empresas</div>
+        <div class="area-desc">As empresas atendidas pelo sistema.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície adm, versão 1.0.0, desde 17/11).</p>
+        
+        
+      </div>
+      <div class="area">
+        <div class="area-nome">Conexões</div>
+        <div class="area-desc">A conta e o horário de leitura de cada empresa.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície adm, versão 1.0.0, desde 17/11).</p>
+        
+        
+      </div>
+      <div class="area">
+        <div class="area-nome">Aprovações</div>
+        <div class="area-desc">Os pedidos em aberto e o que já foi decidido.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície adm, versão 1.0.0, desde 17/11).</p>
+        
+        
+      </div>
+      <div class="area">
+        <div class="area-nome">Histórico de consultas</div>
+        <div class="area-desc">As consultas já feitas.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície adm, versão 1.0.0, desde 17/11).</p>
+        
+        
+      </div>
+      <div class="area">
+        <div class="area-nome">Retornos</div>
+        <div class="area-desc">O que as pessoas contaram depois de consultar.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície adm, versão 1.0.0, desde 17/11).</p>
+        
+        
+      </div>
+      <div class="area">
+        <div class="area-nome">Acessos de integração</div>
+        <div class="area-desc">Quem consulta de fora da tela.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície adm, versão 1.0.0, desde 17/11).</p>
+        
+        
+      </div></section><section class="vareta"><h3>PI</h3><p class="desc">O processamento e a revisão. A leitura das caixas só corre quando for ligada.</p>
+      <div class="area">
+        <div class="area-nome">Revisão da cobertura</div>
+        <div class="area-desc">Mostra a leva, marca o que ainda não oferta e só troca o mapa publicado quando as ruas da área estão completas.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Escrito nesta máquina. Se faltar quadra de rua, o mapa publicado fica como está. Ainda não foi para o ambiente real.</p>
+        <p class="area-numeros">quadras de rua já guardadas: <b>200</b> · quadras de rua de Goiânia já guardadas: <b>90</b> · quadras de rua que Goiânia precisa: <b>256</b> · quadras de rua de Salvador já guardadas: <b>90</b> · quadras de rua que Salvador precisa: <b>143</b> · quadras de rua de Goianésia já guardadas: <b>0</b> · quadras de rua que Goianésia precisa: <b>12</b></p>
+        
+      </div>
+      <div class="area">
+        <div class="area-nome">Leitura das caixas</div>
+        <div class="area-desc">Na hora marcada, lê as caixas da empresa e deixa a leva esperando revisão.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície pi, versão 1.0.1, desde 17/11). A fila continua parada até ser ligada de propósito.</p>
+        
+        
+      </div>
+      <div class="area">
+        <div class="area-nome">Desenhos e prédios</div>
+        <div class="area-desc">A entrada dos desenhos da área e dos prédios.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície pi, versão 1.0.1, desde 17/11).</p>
+        
+        
+      </div>
+      <div class="area">
+        <div class="area-nome">Subida em partes</div>
+        <div class="area-desc">O que pode ir ao ambiente real sem a consulta e sem a tela.</div>
+        <div class="chips"><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Processamento e gestão podem subir sozinhos. Consulta, tela e mapa só sobem em horário marcado.</p>
+        
+        
+      </div></section><section class="vareta"><h3>Mapa</h3><p class="desc">Um desenho só, visto na consulta, na gestão e no processamento.</p>
+      <div class="area">
+        <div class="area-nome">Desenho comum</div>
+        <div class="area-desc">Cores, foto e nomes de rua. Mudar aqui muda as três telas.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Em produção (superfície mapa, versão 1.0.0, desde 17/11).</p>
+        
+        
+      </div></section></div>
+  <div class="secoes"><section class="secao"><h2>Partes da subida</h2><div class="parte"><b>pi</b> <span class="badge" style="background:#1a7f37">sobe sozinha</span><p style="margin:6px 0 0">Sobe sozinha. Não inclui a consulta, o CL nem o desenho do mapa.</p></div><div class="parte"><b>adm</b> <span class="badge" style="background:#1a7f37">sobe sozinha</span><p style="margin:6px 0 0">Painel. A consulta do CL não passa por esta tela.</p></div><div class="parte"><b>consulta</b> <span class="badge" style="background:#cf222e">só em horário marcado</span><p style="margin:6px 0 0">Mexe na API e no CL. Só sobe em horário marcado.</p></div></section><section class="secao"><h2>Quem faz o quê</h2><ul class="lista"><li><b>Dono</b><div class="resp">decide, testa em uso real e confirma a subida</div></li><li><b>DEV</b><div class="resp">a equipe de desenvolvimento: a IA programa e a pessoa ajusta e testa</div></li><li><b>Supervisor</b><div class="resp">acompanha o andamento e cobra</div></li></ul></section></div>
+  <footer class="rodape">ReportHub · página privada · quem tem o link vê · 18/11/2026 · registros até o nº 3</footer>
+</div>
+</body>
+</html>

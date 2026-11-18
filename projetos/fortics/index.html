@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="report-hub-project" content="fortics">
+<title>Fortics · ReportHub</title>
+<style>
+:root { --borda: #d0d7de; --texto: #1f2328; --suave: #656d76; --painel: #ffffff; --fundo: #f6f8fa; --destaque: #0969da; --ouro: #9a6700; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--fundo); color: var(--texto); line-height: 1.5; }
+.envolve { max-width: 1120px; margin: 0 auto; padding: 32px 20px 64px; }
+.cabeca { border-bottom: 1px solid var(--borda); padding-bottom: 18px; margin-bottom: 24px; }
+.rotulo { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--suave); margin: 0 0 4px; }
+h1 { margin: 0 0 6px; font-size: 26px; }
+h1 a { color: inherit; text-decoration: none; }
+.sub { margin: 0; color: var(--suave); font-size: 14px; }
+.meta { margin-top: 8px; color: var(--suave); font-size: 13px; }
+/* números grandes */
+.numeros { display: flex; flex-wrap: wrap; gap: 10px 22px; margin: 16px 0 0; }
+.num-bloco { min-width: 130px; }
+.num-bloco b { display: block; font-size: 26px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.num-bloco span { font-size: 12px; color: var(--suave); }
+.num-bloco.aviso b { color: #bc4c00; }
+.num-bloco.ok b { color: #1a7f37; }
+/* hub */
+.cartoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+.cartao { background: var(--painel); border: 1px solid var(--borda); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; }
+.cartao h2 { margin: 0 0 4px; font-size: 20px; }
+.cartao h2 a { color: inherit; text-decoration: none; }
+.cartao h2 a:hover { color: var(--destaque); }
+.cartao .desc { color: var(--suave); font-size: 13px; margin: 0 0 12px; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.pill { font-size: 12px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--borda); color: var(--suave); background: #fff; }
+.pill.hoje { color: #1a7f37; border-color: #1a7f37; background: #dafbe1; font-weight: 600; }
+.pill.aviso { color: #bc4c00; border-color: #bc4c00; background: #fff1e5; font-weight: 600; }
+.barra-total { display: flex; height: 10px; border-radius: 5px; overflow: hidden; margin: 4px 0 8px; }
+.barra-total i { display: block; height: 100%; }
+.barra-legenda { font-size: 11px; color: var(--suave); margin-bottom: 12px; }
+.ultimas { border-top: 1px solid var(--borda); margin-top: auto; padding-top: 10px; }
+.ultimas-titulo { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--suave); margin-bottom: 6px; }
+.ultimas ul { list-style: none; margin: 0; padding: 0; }
+.ultimas li { font-size: 12px; padding: 3px 0; display: flex; gap: 8px; align-items: baseline; }
+.ultimas .hora { color: var(--suave); font-variant-numeric: tabular-nums; white-space: nowrap; min-width: 38px; }
+.ultimas .estrela { color: var(--ouro); }
+.abrir { display: inline-block; margin-top: 10px; color: var(--destaque); font-size: 14px; font-weight: 600; text-decoration: none; }
+.abrir:hover { text-decoration: underline; }
+/* o que foi feito */
+.feito { background: var(--painel); border: 1px solid var(--borda); border-radius: 12px; padding: 18px 20px; margin-bottom: 20px; }
+.feito h2, .aguardando h2 { margin: 0 0 4px; font-size: 15px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--suave); }
+.dia { font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--destaque); margin: 12px 0 4px; }
+.dia .data-cheia { color: var(--suave); font-weight: 400; }
+.feito-lista { list-style: none; margin: 0; padding: 0; }
+.feito-lista li { display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--fundo); font-size: 14px; align-items: baseline; }
+.feito-lista li:last-child { border-bottom: 0; }
+.feito-lista .hora { color: var(--suave); font-variant-numeric: tabular-nums; min-width: 44px; white-space: nowrap; }
+.feito-lista .estrela { color: var(--ouro); }
+.feito-lista .ponto-lista { color: #c8ccd2; }
+.feito-lista .onde { color: var(--suave); font-size: 12px; white-space: nowrap; background: var(--fundo); border-radius: 6px; padding: 1px 7px; }
+/* aguardando o dono */
+.aguardando { background: #fff8e1; border: 1px solid #e7d8a8; border-radius: 12px; padding: 18px 20px; margin-bottom: 20px; }
+.aguardando h2 { color: #9a6700; }
+.aguardando ul { list-style: none; margin: 6px 0 0; padding: 0; }
+.aguardando li { padding: 8px 0; border-bottom: 1px solid #f0e5c0; font-size: 14px; }
+.aguardando li:last-child { border-bottom: 0; }
+.badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; margin-left: 6px; color: #fff; }
+.resp { color: var(--suave); font-size: 12px; }
+/* painel do projeto */
+.varetas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 20px; margin-top: 8px; }
+.vareta { background: var(--painel); border: 1px solid var(--borda); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.vareta h3 { margin: 0; font-size: 17px; }
+.vareta .desc { color: var(--suave); font-size: 13px; margin: 0; }
+.area { border-top: 1px solid var(--borda); padding-top: 10px; }
+.area-nome { font-weight: 600; font-size: 14px; }
+.area-desc { color: var(--suave); font-size: 12px; margin: 2px 0 6px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; }
+.area-nota { font-size: 13px; margin: 8px 0 0; }
+.area-numeros { font-size: 12px; color: var(--suave); margin: 6px 0 0; }
+.etapa-strip { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 6px; }
+.etapa-linha { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--suave); border: 1px solid var(--borda); border-radius: 8px; padding: 3px 10px; background: #fff; }
+.ponto { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+.secoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 20px; margin-top: 24px; }
+.secao { background: var(--painel); border: 1px solid var(--borda); border-radius: 12px; padding: 18px; }
+.secao h2 { margin: 0 0 12px; font-size: 15px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--suave); }
+.lista { list-style: none; margin: 0; padding: 0; }
+.lista li { padding: 8px 0; border-bottom: 1px solid var(--borda); font-size: 13px; }
+.lista li:last-child { border-bottom: 0; }
+.barra-linha { display: grid; grid-template-columns: 150px 1fr 40px; align-items: center; gap: 10px; font-size: 13px; padding: 4px 0; }
+.barra { height: 8px; border-radius: 4px; background: #eaeef2; overflow: hidden; }
+.barra i { display: block; height: 100%; background: var(--destaque); }
+.parte { border-top: 1px solid var(--borda); padding-top: 10px; margin-top: 10px; font-size: 13px; }
+.parte b { font-size: 14px; }
+.rodape { margin-top: 40px; color: var(--suave); font-size: 12px; text-align: center; }
+/* interação: tudo que parece botão leva a um lugar */
+html { scroll-behavior: smooth; }
+.num-bloco a { display: block; text-decoration: none; color: inherit; border-radius: 8px; padding: 2px 8px; margin: -2px -8px; }
+.num-bloco a:hover b { color: var(--destaque); }
+.num-bloco.aviso a:hover b { color: #cf222e; }
+a.pill { text-decoration: none; }
+a.pill:hover { border-color: var(--destaque); color: var(--destaque); }
+a.pill.aviso:hover { border-color: #cf222e; color: #cf222e; }
+a.barra-total { display: block; text-decoration: none; }
+a.barra-total:hover { opacity: 0.8; }
+.ultimas li a, .feito-lista li a { color: inherit; text-decoration: none; }
+.ultimas li a:hover span { text-decoration: underline; }
+a.onde { text-decoration: none; }
+a.onde:hover { background: #e4e9ef; }
+.etapa-linha a { color: inherit; text-decoration: none; }
+.etapa-linha a:hover { color: var(--destaque); }
+a.volta { font-size: 13px; color: var(--suave); text-decoration: none; }
+a.volta:hover { color: var(--destaque); }
+</style>
+</head>
+<body>
+<div class="envolve">
+  <header class="cabeca">
+    <p class="rotulo">Projeto · ReportHub</p>
+    <h1><a href="../hub/index.html">Fortics</a></h1>
+    <p class="meta">Manhã de 18/11/2026 · gerado em 18/11/2026</p>
+    <div class="numeros">
+      <div class="num-bloco ok"><a href="#feito"><b>7</b><span>mudanças hoje</span></a></div>
+      <div class="num-bloco aviso"><a href="#pendencias"><b>15</b><span>aguardam o dono</span></a></div>
+      <div class="num-bloco "><a href="#areas"><b>6</b><span>áreas</span></a></div>
+      <div class="num-bloco "><a href="#pendencias"><b>16</b><span>pendências ao todo</span></a></div>
+    </div>
+  </header>
+  <section class="feito" id="feito"><h2>O que foi feito</h2><div class="dia">Hoje</div><ul class="feito-lista"><li><span class="hora">10:32</span><span class="estrela">★</span><span>Saudação da Maria Luísa ajustada para três linhas, depois do primeiro teste do dono em conversa real</span><span class="onde">Agentes IA · Triagem</span></li><li><span class="hora">10:32</span><span class="estrela">★</span><span>Lista de funcionalidades do Suporte entregue em Word para a supervisão</span><span class="onde">Agentes IA · Suporte</span></li><li><span class="hora">10:32</span><span class="estrela">★</span><span>Script de subida do agente passou a corrigir o nome e a escolher a credencial sozinho</span><span class="onde">Agentes IA · Suporte</span></li><li><span class="hora">10:32</span><span class="estrela">★</span><span>Revisão iniciada, com levantamento e decisões feitas, roteiro de testes escrito e material entregue à Triagem</span><span class="onde">Agentes IA · Financeiro</span></li><li><span class="hora">10:32</span><span class="estrela">★</span><span>Auditoria em duas passadas concluída e correções de baixa criticidade aplicadas</span><span class="onde">Agentes IA · Financeiro</span></li><li><span class="hora">10:32</span><span class="estrela">★</span><span>Revisão fechada, com marco guardado e material detalhado entregue à Triagem</span><span class="onde">Agentes IA · Financeiro</span></li><li><span class="hora">10:32</span><span class="estrela">★</span><span>Dono delegou as decisões de baixa criticidade e aceitou conferir o sistema por comandos de leitura</span><span class="onde">Agentes IA · Financeiro</span></li></ul><div class="dia">Ontem</div><ul class="feito-lista"><li><span class="hora"></span><span class="estrela">★</span><span>Revisão do Suporte fechada: cinco ferramentas novas, auditoria e decisões comuns</span><span class="onde">Agentes IA · Suporte</span></li><li><span class="hora"></span><span class="estrela">★</span><span>Script único para subir o agente e vincular as dependências, em teste</span><span class="onde">Agentes IA · Todos</span></li><li><span class="hora"></span><span class="estrela">★</span><span>Lista de funcionalidades do Primeiro Nível em Word, para a supervisão</span><span class="onde">Agentes IA · Primeiro Nível</span></li><li><span class="hora"></span><span class="estrela">★</span><span>Regras novas: dois assuntos na mesma mensagem e regra declarada uma vez, com apontamento</span><span class="onde">Agentes IA · Todos</span></li></ul><div class="dia">16/11/2026</div><ul class="feito-lista"><li><span class="hora"></span><span class="estrela">★</span><span>Marco Primeira Revisão: Triagem e Primeiro Nível revisados e em teste</span><span class="onde">Agentes IA · Triagem e Primeiro Nível</span></li><li><span class="hora"></span><span class="estrela">★</span><span>Encerramento do atendimento por tag, para ligar às tabulações no fim do projeto</span><span class="onde">Agentes IA · Triagem e Primeiro Nível</span></li><li><span class="hora"></span><span class="estrela">★</span><span>Modelos trocados para a família GPT-6, depois de 30 a 40 segundos de espera entre respostas</span><span class="onde">Agentes IA · Todos</span></li></ul></section>
+  <section class="secao" id="pendencias"><h2>Pendências por responsável</h2><div class="dia">Dono <span class="data-cheia">· 12</span></div><ul class="feito-lista"><li><span>Responder os quatro pontos da auditoria do Financeiro</span> <span class="badge" style="background:#cf222e">Decisão</span></li><li><span>Criar o agente Financeiro na plataforma e subir o lote</span> <span class="badge" style="background:#0969da">Subida</span></li><li><span>Passar a régua de desconto e de parcelas e dizer se usa as Regras de Renegociação do sistema</span> <span class="badge" style="background:#cf222e">Decisão</span></li><li><span>Rodar os comandos de leitura e colar o retorno com os dados cobertos, para fechar a consulta de fatura e o cadastro cancelado</span> <span class="badge" style="background:#1a7f37">Teste</span></li><li><span>Subir a revisão do Primeiro Nível: quatro workflows compartilhados, Outras regras e Passos</span> <span class="badge" style="background:#0969da">Subida</span></li><li><span>Importar à mão os workflows do Suporte e rodar o script de vínculo</span> <span class="badge" style="background:#0969da">Subida</span></li><li><span>Revisar a Triagem e subir o lote com a saudação, o emoji e a volta do Suporte</span> <span class="badge" style="background:#8250df">Revisão</span></li><li><span>Criar no SZ.chat as condições do Suporte: entrada, fila humana e encerramento</span> <span class="badge" style="background:#9a6700">Fluxo</span></li><li><span>Validar as leituras da regra de emoji: espelhamento fora do atendimento, área sensível e fatura como problema</span> <span class="badge" style="background:#cf222e">Decisão</span></li><li><span>Testar em conversa real o roteiro de 11 testes e o encerramento</span> <span class="badge" style="background:#1a7f37">Teste</span></li><li><span>Antes de cliente real: trocar o canal de teste do envio de fatura e a credencial do workflow de cobertura</span> <span class="badge" style="background:#bc4c00">Risco</span></li><li><span>No fim do projeto: tabulações, pesquisa de satisfação e saída por tempo limite</span> <span class="badge" style="background:#9a6700">Fluxo</span></li></ul><div class="dia">Dono e DEV <span class="data-cheia">· 3</span></div><ul class="feito-lista"><li><span>Rodar o roteiro de 29 testes do Financeiro em conversa real</span> <span class="badge" style="background:#1a7f37">Teste</span></li><li><span>Medir o tempo de resposta depois da troca de modelo, com meta de 10 s sem ferramenta e 20 s com ferramenta</span> <span class="badge" style="background:#bc4c00">Risco</span></li><li><span>Revisar Comercial e Comercial Cliente, um por vez</span> <span class="badge" style="background:#8250df">Revisão</span></li></ul><div class="dia">Construtor do executor <span class="data-cheia">· 1</span></div><ul class="feito-lista"><li><span>Executor de testes: ajustar à página real do WhatsApp e descrever o reset no Fortics</span> <span class="badge" style="background:#1a7f37">Teste</span></li></ul></section>
+  <div class="etapa-strip"><span class="etapa-linha"><a href="#areas">escrito: <span class="ponto" style="background:#1a7f37"></span>6 <span class="ponto" style="background:#9a6700"></span>0 <span class="ponto" style="background:#0969da"></span>0 <span class="ponto" style="background:#6e7781"></span>0</a></span><span class="etapa-linha"><a href="#areas">revisado: <span class="ponto" style="background:#1a7f37"></span>4 <span class="ponto" style="background:#9a6700"></span>0 <span class="ponto" style="background:#0969da"></span>0 <span class="ponto" style="background:#6e7781"></span>2</a></span><span class="etapa-linha"><a href="#areas">subido: <span class="ponto" style="background:#1a7f37"></span>0 <span class="ponto" style="background:#9a6700"></span>2 <span class="ponto" style="background:#0969da"></span>1 <span class="ponto" style="background:#6e7781"></span>3</a></span><span class="etapa-linha"><a href="#areas">testado: <span class="ponto" style="background:#1a7f37"></span>0 <span class="ponto" style="background:#9a6700"></span>2 <span class="ponto" style="background:#0969da"></span>0 <span class="ponto" style="background:#6e7781"></span>4</a></span></div>
+  <div class="varetas" id="areas"><section class="vareta"><h3>Agentes IA</h3><p class="desc">Os seis agentes de inteligência artificial que atendem os clientes da sim.digital pelo WhatsApp, na Bahia e em Goiás.</p>
+      <div class="area">
+        <div class="area-nome">Triagem</div>
+        <div class="area-desc">Recebe o cliente, entende o que ele quer e passa a conversa ao agente certo.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#9a6700;background:#fff8c5">Parcial</span><span class="chip" style="color:#9a6700;background:#fff8c5">Parcial</span></div>
+        <p class="area-nota">Revisada em 16/11. Saudação mais calorosa, em três linhas, e regra de emoji novas; o lote de 16 a 18/11 está sendo subido pelo dono.</p>
+        <p class="area-numeros">arquivos de conhecimento do agente na unidade da Bahia: <b>6</b> · ferramentas (workflows) do agente na unidade da Bahia: <b>1</b> · consultas à base de dados do agente na unidade da Bahia: <b>0</b> · tamanho, em KB, das instruções do agente: <b>34</b></p>
+        <p class="area-numeros">Modelo: gpt-6-luna-fast</p>
+      </div>
+      <div class="area">
+        <div class="area-nome">Primeiro Nível</div>
+        <div class="area-desc">Resolve as ações do dia a dia de quem já é cliente: fatura, comprovante, desbloqueio, plano e cadastro.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#9a6700;background:#fff8c5">Parcial</span><span class="chip" style="color:#9a6700;background:#fff8c5">Parcial</span></div>
+        <p class="area-nota">Revisado em 16/11. Lote da revisão em subida pelo dono. Em conversa real só o boleto e a conversa geral foram testados (14 testes).</p>
+        <p class="area-numeros">arquivos de conhecimento do agente na unidade da Bahia: <b>26</b> · ferramentas (workflows) do agente na unidade da Bahia: <b>11</b> · consultas à base de dados do agente na unidade da Bahia: <b>4</b> · tamanho, em KB, das instruções do agente: <b>59</b></p>
+        <p class="area-numeros">Modelo: gpt-6.1-sol-fast</p>
+      </div>
+      <div class="area">
+        <div class="area-nome">Suporte</div>
+        <div class="area-desc">Trata as falhas de quem já é cliente: sem acesso, lentidão, Wi-Fi e telefone fixo, e abre o chamado quando o teste não resolve.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#0969da;background:#ddf4ff">Em andamento</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Revisado em 17/11, com cinco ferramentas novas. Agente criado na plataforma; faltam os workflows, os conhecimentos e os vínculos. Lista de funcionalidades entregue em Word para a supervisão.</p>
+        <p class="area-numeros">arquivos de conhecimento do agente na unidade da Bahia: <b>10</b> · ferramentas (workflows) do agente na unidade da Bahia: <b>9</b> · consultas à base de dados do agente na unidade da Bahia: <b>0</b> · tamanho, em KB, das instruções do agente: <b>52</b></p>
+        <p class="area-numeros">Modelo: gpt-6.1-sol-fast</p>
+      </div>
+      <div class="area">
+        <div class="area-nome">Financeiro</div>
+        <div class="area-desc">Cuida da conta de quem já é cliente: titular, vencimento, nota fiscal, negociação de dívida e cancelamento.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Revisado em 18/11. Ainda não subiu nem foi testado em conversa; roteiro de 29 testes pronto e negociação da dívida em plano, esperando dados da operação.</p>
+        <p class="area-numeros">arquivos de conhecimento do agente na unidade da Bahia: <b>11</b> · ferramentas (workflows) do agente na unidade da Bahia: <b>6</b> · consultas à base de dados do agente na unidade da Bahia: <b>3</b> · tamanho, em KB, das instruções do agente: <b>33</b></p>
+        <p class="area-numeros">Modelo: gpt-6.1-sol-moderado</p>
+      </div>
+      <div class="area">
+        <div class="area-nome">Comercial</div>
+        <div class="area-desc">Atende quem ainda não é cliente e quer conhecer ou contratar um plano.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Escrito em 10/11. Aguarda a revisão.</p>
+        <p class="area-numeros">arquivos de conhecimento do agente na unidade da Bahia: <b>8</b> · ferramentas (workflows) do agente na unidade da Bahia: <b>1</b> · consultas à base de dados do agente na unidade da Bahia: <b>9</b> · tamanho, em KB, das instruções do agente: <b>24</b></p>
+        <p class="area-numeros">Modelo: gpt-6.1-sol-moderado</p>
+      </div>
+      <div class="area">
+        <div class="area-nome">Comercial Cliente</div>
+        <div class="area-desc">Vende produtos novos a quem já é cliente, como adicionais e equipamentos.</div>
+        <div class="chips"><span class="chip" style="color:#1a7f37;background:#dafbe1">Feito</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span><span class="chip" style="color:#6e7781;background:#eaeef2">Pendente</span></div>
+        <p class="area-nota">Escrito em 10/11. Aguarda a revisão.</p>
+        <p class="area-numeros">arquivos de conhecimento do agente na unidade da Bahia: <b>9</b> · ferramentas (workflows) do agente na unidade da Bahia: <b>4</b> · consultas à base de dados do agente na unidade da Bahia: <b>9</b> · tamanho, em KB, das instruções do agente: <b>28</b></p>
+        <p class="area-numeros">Modelo: gpt-6.1-sol-fast</p>
+      </div></section></div>
+  <div class="secoes"><section class="secao"><h2>Funções do sistema antigo</h2><div class="barra-linha"><span>Cobertas</span><div class="barra"><i style="width:100%"></i></div><span>65</span></div><div class="barra-linha"><span>Em parte</span><div class="barra"><i style="width:20%"></i></div><span>13</span></div><div class="barra-linha"><span>Sem dono</span><div class="barra"><i style="width:0%"></i></div><span>0</span></div><div class="barra-linha"><span>Do fluxo</span><div class="barra"><i style="width:6%"></i></div><span>4</span></div><div class="barra-linha"><span>Retiradas por decisão</span><div class="barra"><i style="width:3%"></i></div><span>2</span></div></section><section class="secao"><h2>Metas</h2><div class="parte" style="border-top:0;padding-top:0;margin-top:0"><b>Cobertura do legado</b> <span class="chip" style="color:#0969da;background:#ddf4ff">Em andamento</span><p style="margin:6px 0 2px">65 de 84 funções cobertas; 13 em parte; nenhuma sem dono</p><p class="area-numeros" style="margin:0">Posição de 10/11, depois da primeira onda. As 13 em parte dependem de ferramenta, de dado ou de decisão.</p></div><div style="height:14px"></div><div class="parte" style="border-top:0;padding-top:0;margin-top:0"><b>Enriquecimento pelo padrão de mercado</b> <span class="chip" style="color:#0969da;background:#ddf4ff">Em andamento</span><p style="margin:6px 0 2px">7 itens aprovados e escritos</p><p class="area-numeros" style="margin:0">A primeira onda entrou em 10/11. Os demais itens aguardam decisão do dono.</p></div><div style="height:14px"></div><div class="parte" style="border-top:0;padding-top:0;margin-top:0"><b>Testes</b> <span class="chip" style="color:#6e7781;background:#eaeef2">Em construção</span><p style="margin:6px 0 2px">14 testes em conversa real; 36 testes automáticos escritos</p><p class="area-numeros" style="margin:0">Em conversa real só o boleto e a conversa geral do Primeiro Nível foram testados. A simulação de 10 e 11/11 é indicativa, com outro modelo. O executor automático está em construção.</p></div></section><section class="secao"><h2>Quem faz o quê</h2><ul class="lista"><li><b>Dono</b><div class="resp">decide, testa em conversa real e confirma a subida</div></li><li><b>DEV</b><div class="resp">a equipe de desenvolvimento: a IA programa, escreve e revisa; a pessoa ajusta e testa</div></li><li><b>Supervisor</b><div class="resp">acompanha o andamento e cobra</div></li><li><b>Construtor do executor</b><div class="resp">constrói e ajusta o executor de testes automáticos</div></li></ul></section></div>
+  <footer class="rodape">ReportHub · página privada · quem tem o link vê · 18/11/2026 · registros até o nº 7</footer>
+</div>
+</body>
+</html>
