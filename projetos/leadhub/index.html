@@ -51,12 +51,54 @@ h1 a { color: inherit; text-decoration: none; }
 .dia { font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--destaque); margin: 12px 0 4px; }
 .dia .data-cheia { color: var(--suave); font-weight: 400; }
 .feito-lista { list-style: none; margin: 0; padding: 0; }
-.feito-lista li { display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--fundo); font-size: 14px; align-items: baseline; }
+.feito-lista li { display: grid; grid-template-columns: 44px 16px minmax(0, 1fr); gap: 4px 10px; padding: 8px 0; border-bottom: 1px solid var(--fundo); font-size: 14px; align-items: baseline; }
 .feito-lista li:last-child { border-bottom: 0; }
-.feito-lista .hora { color: var(--suave); font-variant-numeric: tabular-nums; min-width: 44px; white-space: nowrap; }
+.feito-lista .hora { color: var(--suave); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .feito-lista .estrela { color: var(--ouro); }
 .feito-lista .ponto-lista { color: #c8ccd2; }
-.feito-lista .onde { color: var(--suave); font-size: 12px; white-space: nowrap; background: var(--fundo); border-radius: 6px; padding: 1px 7px; }
+.feito-lista .txt { min-width: 0; overflow-wrap: anywhere; }
+.feito-lista .txt .onde { display: inline-block; margin: 4px 8px 0 0; }
+.feito-lista .onde { color: var(--suave); font-size: 12px; background: var(--fundo); border-radius: 6px; padding: 1px 7px; }
+.feito-lista .com-badge { grid-template-columns: minmax(0, 1fr); }
+/* navegação: barra do topo, trilha, índice da página, voltar ao topo */
+html { scroll-padding-top: 118px; }
+.topo { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,0.96); backdrop-filter: blur(6px); border-bottom: 1px solid var(--borda); }
+.topo-in { max-width: 1120px; margin: 0 auto; padding: 8px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.marca-hub { font-weight: 700; font-size: 15px; color: var(--texto); text-decoration: none; padding: 4px 0; }
+.marca-hub:hover { color: var(--destaque); }
+.nav-projetos { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: thin; flex: 1 1 auto; min-width: 0; }
+.nav-projetos a, .indice a { white-space: nowrap; font-size: 13px; text-decoration: none; color: var(--suave); padding: 5px 11px; border-radius: 999px; border: 1px solid transparent; }
+.nav-projetos a:hover, .indice a:hover { color: var(--destaque); border-color: var(--borda); }
+.nav-projetos a[aria-current="page"] { color: #fff; background: var(--destaque); font-weight: 600; }
+.indice { max-width: 1120px; margin: 0 auto; padding: 0 20px 8px; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: thin; }
+.indice a.ativo { color: var(--destaque); border-color: var(--destaque); background: #ddf4ff; font-weight: 600; }
+.trilha { font-size: 13px; color: var(--suave); margin: 0 0 10px; }
+.trilha a { color: var(--suave); text-decoration: none; }
+.trilha a:hover { color: var(--destaque); text-decoration: underline; }
+.trilha span[aria-hidden] { margin: 0 6px; }
+.ao-topo { position: fixed; right: 16px; bottom: 16px; z-index: 20; width: 42px; height: 42px; border-radius: 50%; background: var(--destaque); color: #fff; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.25); opacity: 0.92; }
+.ao-topo:hover { opacity: 1; }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--destaque); outline-offset: 2px; border-radius: 4px; }
+/* dias do feed recolhíveis */
+details.dia-bloco { margin: 10px 0 0; border-top: 1px solid var(--fundo); }
+details.dia-bloco > summary { cursor: pointer; list-style: none; display: flex; align-items: baseline; gap: 8px; padding: 10px 0 4px; }
+details.dia-bloco > summary::-webkit-details-marker { display: none; }
+details.dia-bloco > summary::before { content: "▸"; color: var(--suave); font-size: 12px; transition: transform 0.15s; }
+details.dia-bloco[open] > summary::before { transform: rotate(90deg); }
+details.dia-bloco .dia { margin: 0; }
+details.mais > summary { cursor: pointer; font-size: 13px; color: var(--destaque); padding: 8px 0 2px 54px; list-style: none; }
+details.mais > summary::-webkit-details-marker { display: none; }
+details.mais[open] > summary { display: none; }
+@media (max-width: 600px) {
+  .envolve { padding: 20px 14px 56px; }
+  .topo-in, .indice { padding-left: 14px; padding-right: 14px; }
+  h1 { font-size: 22px; }
+  .feito, .vareta, .secao, .cartao { padding: 14px; }
+  .feito-lista li { grid-template-columns: 40px 14px minmax(0, 1fr); gap: 4px 8px; }
+  .barra-linha { grid-template-columns: 96px 1fr 32px; }
+  .cartoes { grid-template-columns: minmax(0, 1fr); }
+  html { scroll-padding-top: 112px; }
+}
 /* painel do projeto */
 .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; margin-left: 6px; color: #fff; }
 .resp { color: var(--suave); font-size: 12px; }
@@ -101,6 +143,7 @@ a.pill.aviso:hover { border-color: #cf222e; color: #cf222e; }
 a.barra-total { display: block; text-decoration: none; }
 a.barra-total:hover { opacity: 0.8; }
 .ultimas li a, .feito-lista li a { color: inherit; text-decoration: none; }
+.ultimas li a { display: flex; gap: 8px; align-items: baseline; min-width: 0; }
 .ultimas li a:hover span { text-decoration: underline; }
 a.onde { text-decoration: none; }
 a.onde:hover { background: #e4e9ef; }
@@ -110,11 +153,12 @@ a.volta { font-size: 13px; color: var(--suave); text-decoration: none; }
 a.volta:hover { color: var(--destaque); }
 </style>
 </head>
-<body>
+<body id="topo">
+<nav class="topo" aria-label="Navegação principal"><div class="topo-in"><a class="marca-hub" href="../../hub/index.html">ReportHub</a><div class="nav-projetos"><a href="../dispohub/index.html">DispoHub</a><a href="../fortics/index.html">Fortics</a><a href="../leadhub/index.html" aria-current="page">LeadHub</a></div></div><div class="indice" aria-label="Nesta página"><a href="#feito">O que foi feito</a><a href="#pendencias">Pendências</a><a href="#areas">Áreas</a><a href="#secao-roles">Quem faz o quê</a></div></nav>
 <div class="envolve">
   <header class="cabeca">
-    <p class="rotulo">Projeto · ReportHub</p>
-    <h1><a href="../hub/index.html">LeadHub</a></h1>
+    <p class="trilha"><a href="../../hub/index.html">ReportHub</a><span aria-hidden="true">›</span>LeadHub</p>
+    <h1>LeadHub</h1>
     <p class="meta">Fim do dia 18/11/2026 · gerado em 18/11/2026 · conferido 18/11 às 17:10</p>
     
     <div class="numeros">
@@ -124,10 +168,10 @@ a.volta:hover { color: var(--destaque); }
       <div class="num-bloco "><a href="#pendencias"><b>5</b><span>pendências ao todo</span></a></div>
     </div>
   </header>
-  <section class="feito" id="feito"><h2>O que foi feito</h2><div class="dia">Hoje</div><ul class="feito-lista"><li><span class="hora">14:15</span><span class="ponto-lista">•</span><span>o rascunho passa a guardar o valor mensal e o texto do lead</span><span class="onde">Comercial · Publicar gravação</span></li><li><span class="hora">13:52</span><span class="estrela">★</span><span>o dono confirmou que a tela apareceu</span><span class="onde">Comercial · Configuração</span></li><li><span class="hora">13:52</span><span class="ponto-lista">•</span><span>a tela segue mostrando segurança, a entrada e a conta só como preenchida ou vazia</span><span class="onde">Comercial · Visão de produção</span></li><li><span class="hora">13:52</span><span class="ponto-lista">•</span><span>criar funil novo segue disponível, sem caminho de entrada novo</span><span class="onde">Comercial · Funil</span></li><li><span class="hora">13:52</span><span class="ponto-lista">•</span><span>o botão segue pronto e a gravação nova continua sem clique</span><span class="onde">Comercial · Publicar gravação</span></li><li><span class="hora">13:52</span><span class="ponto-lista">•</span><span>o quadro segue no visual alinhado, sem uso confirmado pelo dono</span><span class="onde">Comercial · Quadro</span></li><li><span class="hora">13:52</span><span class="ponto-lista">•</span><span>o lançamento segue só criando o prospecto, sem teste do dono</span><span class="onde">Comercial · Lançar</span></li><li><span class="hora">10:45</span><span class="estrela">★</span><span>Segurança, fluxo de entrada e conta só como preenchida ou vazia</span><span class="onde">Comercial · Visão de produção</span></li><li><span class="hora">10:45</span><span class="estrela">★</span><span>Botão para criar funil novo sem mover o card que já existe</span><span class="onde">Comercial · Funil</span></li><li><span class="hora">10:45</span><span class="estrela">★</span><span>Botão Publicar gravação nova pronto, ainda sem clique</span><span class="onde">Comercial · Publicar gravação</span></li></ul><div class="dia">Ontem</div><ul class="feito-lista"><li><span class="hora">15:00</span><span class="estrela">★</span><span>o fundo passou a seguir o tema, e o login, o quadro e o menu do cartão ficaram no mesmo visual</span><span class="onde">Comercial · Quadro</span></li><li><span class="hora">15:00</span><span class="ponto-lista">•</span><span>ficaram em aberto a base nova do quadro e a saída dos cards de teste</span><span class="onde">Comercial · Quadro</span></li><li><span class="hora"></span><span class="estrela">★</span><span>Tela com links, origens, filas e a documentação de como o lead entra</span><span class="onde">Comercial · Configuração</span></li></ul><div class="dia">16/11/2026</div><ul class="feito-lista"><li><span class="hora">15:00</span><span class="estrela">★</span><span>todos os vendedores passam a ver os funis, e a carga inicial pega só o que está ativo</span><span class="onde">Comercial · Quadro</span></li><li><span class="hora">09:00</span><span class="estrela">★</span><span>a entrada do lead ficou definida antes do funil</span><span class="onde">Comercial · Configuração</span></li></ul><div class="dia">28/10/2026</div><ul class="feito-lista"><li><span class="hora">09:00</span><span class="estrela">★</span><span>o lançamento só cria o prospecto, e o restante fica com quem vendeu</span><span class="onde">Comercial · Lançar</span></li></ul><div class="dia">26/10/2026</div><ul class="feito-lista"><li><span class="hora">15:00</span><span class="estrela">★</span><span>o quadro passou a mostrar busca, funil e o cartão com os dados da venda</span><span class="onde">Comercial · Quadro</span></li></ul><div class="dia">23/10/2026</div><ul class="feito-lista"><li><span class="hora">15:00</span><span class="estrela">★</span><span>a última etapa do funil passa a disparar o envio ao sistema de gestão, e a conversão automática fica para depois</span><span class="onde">Comercial · Lançar</span></li><li><span class="hora">09:00</span><span class="estrela">★</span><span>os funis ficam independentes, o formulário deixa de ser etapa e o histórico antigo fica de fora</span><span class="onde">Comercial · Funil</span></li></ul><div class="dia">22/10/2026</div><ul class="feito-lista"><li><span class="hora">09:00</span><span class="estrela">★</span><span>a migração do comercial marcou o corte e deixou a venda ativa de fora</span><span class="onde">Comercial · Funil</span></li></ul></section>
-  <section class="secao" id="pendencias"><h2>Pendências por responsável</h2><div class="dia">Dono <span class="data-cheia">· 5</span></div><ul class="feito-lista"><li><span>Decidir se preenche a conta dos funis Frente, Indicação, Renov, Link, Upgrades e Vendas IA</span> <span class="badge" style="background:#cf222e">Decisão</span></li><li><span>Apertar Publicar gravação nova para gravar endereço, plano, outros telefones e observação</span> <span class="badge" style="background:#0969da">Subida</span></li><li><span>Decidir se a edição manual de um card vira a base nova</span> <span class="badge" style="background:#cf222e">Decisão</span></li><li><span>Decidir se os cards de teste saem antes do corte</span> <span class="badge" style="background:#cf222e">Decisão</span></li><li><span>Decidir se publica a gravação nova da entrada</span> <span class="badge" style="background:#cf222e">Decisão</span></li></ul></section>
+  <section class="feito" id="feito"><h2>O que foi feito</h2><details class="dia-bloco" open><summary><span class="dia">Hoje</span><span class="data-cheia dia-conta">10 registros</span></summary><ul class="feito-lista"><li><span class="hora">14:15</span><span class="ponto-lista">•</span><div class="txt"><span>o rascunho passa a guardar o valor mensal e o texto do lead</span> <span class="onde">Comercial · Publicar gravação</span></div></li><li><span class="hora">13:52</span><span class="estrela" title="Marco">★</span><div class="txt"><span>o dono confirmou que a tela apareceu</span> <span class="onde">Comercial · Configuração</span></div></li><li><span class="hora">13:52</span><span class="ponto-lista">•</span><div class="txt"><span>a tela segue mostrando segurança, a entrada e a conta só como preenchida ou vazia</span> <span class="onde">Comercial · Visão de produção</span></div></li><li><span class="hora">13:52</span><span class="ponto-lista">•</span><div class="txt"><span>criar funil novo segue disponível, sem caminho de entrada novo</span> <span class="onde">Comercial · Funil</span></div></li><li><span class="hora">13:52</span><span class="ponto-lista">•</span><div class="txt"><span>o botão segue pronto e a gravação nova continua sem clique</span> <span class="onde">Comercial · Publicar gravação</span></div></li><li><span class="hora">13:52</span><span class="ponto-lista">•</span><div class="txt"><span>o quadro segue no visual alinhado, sem uso confirmado pelo dono</span> <span class="onde">Comercial · Quadro</span></div></li><li><span class="hora">13:52</span><span class="ponto-lista">•</span><div class="txt"><span>o lançamento segue só criando o prospecto, sem teste do dono</span> <span class="onde">Comercial · Lançar</span></div></li><li><span class="hora">10:45</span><span class="estrela" title="Marco">★</span><div class="txt"><span>Segurança, fluxo de entrada e conta só como preenchida ou vazia</span> <span class="onde">Comercial · Visão de produção</span></div></li><li><span class="hora">10:45</span><span class="estrela" title="Marco">★</span><div class="txt"><span>Botão para criar funil novo sem mover o card que já existe</span> <span class="onde">Comercial · Funil</span></div></li><li><span class="hora">10:45</span><span class="estrela" title="Marco">★</span><div class="txt"><span>Botão Publicar gravação nova pronto, ainda sem clique</span> <span class="onde">Comercial · Publicar gravação</span></div></li></ul></details><details class="dia-bloco" open><summary><span class="dia">Ontem</span><span class="data-cheia dia-conta">3 registros</span></summary><ul class="feito-lista"><li><span class="hora">15:00</span><span class="estrela" title="Marco">★</span><div class="txt"><span>o fundo passou a seguir o tema, e o login, o quadro e o menu do cartão ficaram no mesmo visual</span> <span class="onde">Comercial · Quadro</span></div></li><li><span class="hora">15:00</span><span class="ponto-lista">•</span><div class="txt"><span>ficaram em aberto a base nova do quadro e a saída dos cards de teste</span> <span class="onde">Comercial · Quadro</span></div></li><li><span class="hora"></span><span class="estrela" title="Marco">★</span><div class="txt"><span>Tela com links, origens, filas e a documentação de como o lead entra</span> <span class="onde">Comercial · Configuração</span></div></li></ul></details><details class="dia-bloco"><summary><span class="dia">16/11/2026</span><span class="data-cheia dia-conta">2 registros</span></summary><ul class="feito-lista"><li><span class="hora">15:00</span><span class="estrela" title="Marco">★</span><div class="txt"><span>todos os vendedores passam a ver os funis, e a carga inicial pega só o que está ativo</span> <span class="onde">Comercial · Quadro</span></div></li><li><span class="hora">09:00</span><span class="estrela" title="Marco">★</span><div class="txt"><span>a entrada do lead ficou definida antes do funil</span> <span class="onde">Comercial · Configuração</span></div></li></ul></details><details class="dia-bloco"><summary><span class="dia">28/10/2026</span><span class="data-cheia dia-conta">1 registro</span></summary><ul class="feito-lista"><li><span class="hora">09:00</span><span class="estrela" title="Marco">★</span><div class="txt"><span>o lançamento só cria o prospecto, e o restante fica com quem vendeu</span> <span class="onde">Comercial · Lançar</span></div></li></ul></details><details class="dia-bloco"><summary><span class="dia">26/10/2026</span><span class="data-cheia dia-conta">1 registro</span></summary><ul class="feito-lista"><li><span class="hora">15:00</span><span class="estrela" title="Marco">★</span><div class="txt"><span>o quadro passou a mostrar busca, funil e o cartão com os dados da venda</span> <span class="onde">Comercial · Quadro</span></div></li></ul></details><details class="dia-bloco"><summary><span class="dia">23/10/2026</span><span class="data-cheia dia-conta">2 registros</span></summary><ul class="feito-lista"><li><span class="hora">15:00</span><span class="estrela" title="Marco">★</span><div class="txt"><span>a última etapa do funil passa a disparar o envio ao sistema de gestão, e a conversão automática fica para depois</span> <span class="onde">Comercial · Lançar</span></div></li><li><span class="hora">09:00</span><span class="estrela" title="Marco">★</span><div class="txt"><span>os funis ficam independentes, o formulário deixa de ser etapa e o histórico antigo fica de fora</span> <span class="onde">Comercial · Funil</span></div></li></ul></details><details class="dia-bloco"><summary><span class="dia">22/10/2026</span><span class="data-cheia dia-conta">1 registro</span></summary><ul class="feito-lista"><li><span class="hora">09:00</span><span class="estrela" title="Marco">★</span><div class="txt"><span>a migração do comercial marcou o corte e deixou a venda ativa de fora</span> <span class="onde">Comercial · Funil</span></div></li></ul></details></section>
+  <section class="secao" id="pendencias"><h2>Pendências por responsável</h2><div class="dia">Dono <span class="data-cheia">· 5</span></div><ul class="feito-lista"><li class="com-badge"><div class="txt"><span>Decidir se preenche a conta dos funis Frente, Indicação, Renov, Link, Upgrades e Vendas IA</span> <span class="badge" style="background:#cf222e">Decisão</span></div></li><li class="com-badge"><div class="txt"><span>Apertar Publicar gravação nova para gravar endereço, plano, outros telefones e observação</span> <span class="badge" style="background:#0969da">Subida</span></div></li><li class="com-badge"><div class="txt"><span>Decidir se a edição manual de um card vira a base nova</span> <span class="badge" style="background:#cf222e">Decisão</span></div></li><li class="com-badge"><div class="txt"><span>Decidir se os cards de teste saem antes do corte</span> <span class="badge" style="background:#cf222e">Decisão</span></div></li><li class="com-badge"><div class="txt"><span>Decidir se publica a gravação nova da entrada</span> <span class="badge" style="background:#cf222e">Decisão</span></div></li></ul></section>
   <div class="etapa-strip"><span class="etapa-linha"><a href="#areas">escrito: <span class="ponto" style="background:#1a7f37"></span>6 <span class="ponto" style="background:#9a6700"></span>0 <span class="ponto" style="background:#0969da"></span>0 <span class="ponto" style="background:#6e7781"></span>0</a></span><span class="etapa-linha"><a href="#areas">revisado: <span class="ponto" style="background:#1a7f37"></span>0 <span class="ponto" style="background:#9a6700"></span>0 <span class="ponto" style="background:#0969da"></span>0 <span class="ponto" style="background:#6e7781"></span>6</a></span><span class="etapa-linha"><a href="#areas">subido: <span class="ponto" style="background:#1a7f37"></span>1 <span class="ponto" style="background:#9a6700"></span>5 <span class="ponto" style="background:#0969da"></span>0 <span class="ponto" style="background:#6e7781"></span>0</a></span><span class="etapa-linha"><a href="#areas">testado: <span class="ponto" style="background:#1a7f37"></span>0 <span class="ponto" style="background:#9a6700"></span>0 <span class="ponto" style="background:#0969da"></span>0 <span class="ponto" style="background:#6e7781"></span>6</a></span></div>
-  <div class="varetas" id="areas"><section class="vareta"><h3>Comercial</h3><p class="desc">A tela de vendas, onde o lead entra e quem administra configura o funil e a entrada.</p>
+  <div class="varetas" id="areas"><section class="vareta" id="p-0"><h3>Comercial</h3><p class="desc">A tela de vendas, onde o lead entra e quem administra configura o funil e a entrada.</p>
       <div class="area">
         <div class="area-nome">Configuração</div>
         <div class="area-desc">O Admin cria o link de entrada, a origem e a etapa do funil, e lê como o lead entra; o vendedor não vê.</div>
@@ -176,8 +220,23 @@ a.volta:hover { color: var(--destaque); }
         
         
       </div></section></div>
-  <div class="secoes"><section class="secao"><h2>Quem faz o quê</h2><ul class="lista"><li><b>Dono</b><div class="resp">decide, testa em uso real e confirma a subida</div></li><li><b>DEV</b><div class="resp">a equipe de desenvolvimento: a IA programa e a pessoa ajusta e testa</div></li><li><b>Supervisor</b><div class="resp">acompanha o andamento e cobra</div></li></ul></section></div>
-  <footer class="rodape">ReportHub · página privada · quem tem o link vê · 18/11/2026 · registros até o nº 20</footer>
+  <div class="secoes"><section class="secao" id="secao-roles"><h2>Quem faz o quê</h2><ul class="lista"><li><b>Dono</b><div class="resp">decide, testa em uso real e confirma a subida</div></li><li><b>DEV</b><div class="resp">a equipe de desenvolvimento: a IA programa e a pessoa ajusta e testa</div></li><li><b>Supervisor</b><div class="resp">acompanha o andamento e cobra</div></li></ul></section></div>
+  <footer class="rodape"><a class="volta" href="../../hub/index.html">← Todos os projetos</a><br>ReportHub · página privada · quem tem o link vê · 18/11/2026 · registros até o nº 20</footer>
 </div>
+<a class="ao-topo" href="#topo" aria-label="Voltar ao topo" title="Voltar ao topo">↑</a>
+<script>
+(function () {
+  var links = [].slice.call(document.querySelectorAll('.indice a'));
+  if (!links.length || !('IntersectionObserver' in window)) return;
+  var alvos = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      links.forEach(function (a) { a.classList.toggle('ativo', a.getAttribute('href') === '#' + e.target.id); });
+    });
+  }, { rootMargin: '-120px 0px -60% 0px' });
+  alvos.forEach(function (el) { if (el) io.observe(el); });
+})();
+</script>
 </body>
 </html>
